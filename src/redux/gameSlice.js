@@ -22,8 +22,7 @@ const initialState = {
       ]
     }
   ],
-  currentQuestionIndex: 0,
-  effortSubsections: []
+  currentQuestionIndex: 0
 };
 
 export const gameSlice = createSlice({
@@ -102,21 +101,7 @@ export const gameSlice = createSlice({
     updateQuestionParagraph: (state, action) => {
       const { index, paragraph } = action.payload;
       state.questions[index].questionParagraph = paragraph;
-    },
-    addEffortSubsection: (state) => {
-      state.effortSubsections.push({
-        name: 'New Subsection',
-        points: 0,
-        pointsName: 'pts',
-      });
-    },
-    updateEffortSubsection: (state, action) => {
-      const { index, field, value } = action.payload;
-      state.effortSubsections[index][field] = value;
-    },
-    removeEffortSubsection: (state, action) => {
-      state.effortSubsections.splice(action.payload, 1);
-    },
+    }
   },
 });
 
@@ -141,10 +126,7 @@ export const {
   updateQuestion, 
   updateQuestionActions, 
   setCurrentQuestionIndex, 
-  updateQuestionParagraph,
-  addEffortSubsection,
-  updateEffortSubsection,
-  removeEffortSubsection
+  updateQuestionParagraph
 } = gameSlice.actions;
 
 export default gameSlice.reducer;

@@ -5,7 +5,7 @@
   background-color: #d0d0d0;
   padding: 10px;
   border-radius: 5px;
-  width: 200px;
+  width: 100%;
   margin-bottom: 10px;
 }
 
@@ -13,6 +13,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  width: 100%;
   margin-bottom: 5px;
 }
 
@@ -30,6 +31,7 @@
   height: 20px;
   border-radius: 10px;
   overflow: hidden;
+  width: 100%;
 }
 
 .tracker-bar-filled {
@@ -53,8 +55,8 @@
 }
 
 .editable-content:focus {
-  outline: 1px solid #4CAF50;
-  padding: 2px;
+  outline: none
+  
 }
 
 [contenteditable=true]:empty:before {
@@ -112,51 +114,12 @@
 /* Add these styles */
 .effort-meter-container {
   position: relative;
-  padding-right: 30px; /* Make space for the add button */
+  width: 100%;
 }
 
 .effort-meter {
   margin-bottom: 15px;
-}
-
-.effort-meter.subsection {
-  margin-bottom: 15px;
-  position: relative;
-  padding-right: 30px; /* Make space for the remove button */
-}
-
-.add-subsection {
-  position: absolute;
-  top: 0;
-  right: 0;
-  background-color: #4CAF50;
-  color: white;
-  border: none;
-  width: 25px;
-  height: 25px;
-  cursor: pointer;
-  border-radius: 50%;
-  font-size: 18px;
-  line-height: 25px;
-  text-align: center;
-}
-
-.remove-subsection {
-  position: absolute;
-  top: 50%;
-  right: 0;
-  transform: translateY(-50%);
-  background-color: #f44336;
-  color: white;
-  border: none;
-  width: 20px;
-  height: 20px;
-  cursor: pointer;
-  border-radius: 50%;
-  font-size: 14px;
-  line-height: 20px;
-  text-align: center;
-  padding: 0;
+  width: 100%;
 }
 
 /* Add these styles */
