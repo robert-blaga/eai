@@ -1,0 +1,118 @@
+@import url('https://fonts.googleapis.com/css2?family=Metric:wght@400;700&display=swap');
+
+body {
+    background-color: #fff1e5;
+    color: #000;
+    font-family: 'Metric', sans-serif;
+    font-size: 16px;
+    line-height: 20px;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+}
+
+.action-list {
+    background-color: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin: 20px 0;
+    max-width: 800px;
+    width: 100%;
+}
+
+.question {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+.question-divider {
+    height: 1px;
+    background-color: #e0e0e0;
+    margin: 15px 0;
+}
+
+.question-paragraph {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    margin-bottom: 20px;
+}
+
+.action {
+    background-color: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    padding: 15px;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    transition: box-shadow 0.3s ease;
+}
+
+.action:hover {
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.action-text {
+    flex-grow: 1;
+    margin-right: 15px;
+}
+
+.action-effort {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-left: 15px;
+    border-left: 1px solid #e0e0e0;
+}
+
+.effort-label {
+    font-size: 12px;
+    color: #666;
+    margin-bottom: 5px;
+}
+
+.effort-value {
+    font-weight: bold;
+}
+
+.next-question, .add-action {
+    margin-top: 15px;
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.next-question:hover, .add-action:hover {
+    background-color: #45a049;
+}
+
+.next-question:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+}
+
+@media screen and (min-width: 1024px) {
+    body {
+        font-size: 18px;
+        line-height: 22px;
+    }
+
+    .question-card {
+        padding: 24px 20px;
+        min-width: 580px;
+    }
+
+    .question {
+        font-size: 20px;
+        line-height: 24px;
+    }
+}

@@ -1,0 +1,181 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap');
+
+.tracker {
+  font-family: 'Roboto', sans-serif;
+  background-color: #d0d0d0;
+  padding: 10px;
+  border-radius: 5px;
+  width: 200px;
+  margin-bottom: 10px;
+}
+
+.tracker-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 5px;
+}
+
+.tracker-label {
+  font-size: 14px;
+  font-weight: 300;
+}
+
+.tracker-value {
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.tracker-bar {
+  height: 20px;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.tracker-bar-filled {
+  height: 100%;
+}
+
+/* Specific styles for EffortMeter */
+.effort-bar {
+  background-color: #e0e0e0;
+}
+
+.effort-bar-filled {
+  background-color: #000;
+}
+
+.editable-content {
+  display: inline-block;
+  min-width: 1em;
+  outline: none;
+  cursor: text;
+}
+
+.editable-content:focus {
+  outline: 1px solid #4CAF50;
+  padding: 2px;
+}
+
+[contenteditable=true]:empty:before {
+  content: attr(placeholder);
+  color: #888;
+  font-style: italic;
+}
+
+/* Specific styles for ImpactMeter */
+.impact-bar {
+  background-color: #ffcccb;
+}
+
+.impact-bar-filled {
+  background-color: #ff0000;
+}
+
+/* Specific styles for TimeMeter */
+.time-bar {
+  background-color: #e6e6fa;
+}
+
+.time-bar-filled {
+  background-color: #8a2be2;
+}
+
+/* Specific styles for Rewards */
+.rewards {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.rewards-icon {
+  font-size: 24px;
+  margin-right: 10px;
+}
+
+.rewards-count {
+  font-size: 18px;
+}
+
+.rewards-count input {
+  width: 40px;
+  text-align: center;
+  font-size: 18px;
+  border: none;
+  background: transparent;
+}
+
+.rewards-count input:read-only {
+  color: inherit;
+}
+
+/* Add these styles */
+.effort-meter-container {
+  position: relative;
+  padding-right: 30px; /* Make space for the add button */
+}
+
+.effort-meter {
+  margin-bottom: 15px;
+}
+
+.effort-meter.subsection {
+  margin-bottom: 15px;
+  position: relative;
+  padding-right: 30px; /* Make space for the remove button */
+}
+
+.add-subsection {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  width: 25px;
+  height: 25px;
+  cursor: pointer;
+  border-radius: 50%;
+  font-size: 18px;
+  line-height: 25px;
+  text-align: center;
+}
+
+.remove-subsection {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+  background-color: #f44336;
+  color: white;
+  border: none;
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  border-radius: 50%;
+  font-size: 14px;
+  line-height: 20px;
+  text-align: center;
+  padding: 0;
+}
+
+/* Add these styles */
+.editable-input {
+  background: none;
+  border: none;
+  font-size: inherit;
+  font-family: inherit;
+  color: inherit;
+  padding: 0;
+  margin: 0;
+  width: auto;
+}
+
+.editable-input:focus {
+  outline: 0px solid #4CAF50;
+  padding: 0px;
+}
+
+.editable-input:read-only {
+  cursor: default;
+}

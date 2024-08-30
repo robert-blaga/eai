@@ -1,0 +1,43 @@
+.action {
+  background-color: white;
+  padding: 15px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: background-color 0.3s ease;
+}
+
+.action-text {
+  flex-grow: 1;
+}
+
+.action select, .action button {
+  margin-left: 10px;
+}
+
+.action-effort, .action-impact {
+  margin-left: 10px;
+  font-size: 14px;
+  color: #666;
+}
+
+.bold {
+  font-weight: bold;
+}
+
+.action.selected {
+  background-color: #e6f7ff;
+  border: 1px solid #1890ff;
+}
+
+.action button:disabled {
+  background-color: #d9d9d9;
+  cursor: not-allowed;
+}
+
+.action button.selected {
+  background-color: #1890ff;
+  color: white;
+}
