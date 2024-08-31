@@ -1,55 +1,80 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { Box, Typography, Button } from '@mui/material';
 import EffortMeter from '../components/trackers/EffortMeter';
 import ImpactMeter from '../components/trackers/ImpactMeter';
 import TimeMeter from '../components/trackers/TimeMeter';
 import Rewards from '../components/trackers/Rewards';
 import ActionList from '../components/actions/ActionList';
-import { setEffortPoints, setImpactPoints, setCurrentQuestionIndex } from '../redux/gameSlice';
-import './GamePlayPage.css';
+import { setCurrentQuestionIndex, updateGameState } from '../redux/gameSlice';
+import { useNavigate } from 'react-router-dom';
 
 const GamePlayPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { questions, currentQuestionIndex, effortPoints, impactPoints } = useSelector(state => state.game);
+  const gameState = useSelector(state => state.game);
+  const [selectedActionIndex, setSelectedActionIndex] = useState(null);
 
-  const handleNextQuestion = (selectedAction) => {
-    if (selectedAction) {
-      dispatch(setEffortPoints(Math.max(0, effortPoints - selectedAction.effort)));
-      dispatch(setImpactPoints(impactPoints + selectedAction.impact));
-    }
+  const handleActionSelect = (index) => {
+    setSelectedActionIndex(index);
+  };
 
-    if (currentQuestionIndex < questions.length - 1) {
-      dispatch(setCurrentQuestionIndex(currentQuestionIndex + 1));
+  const handleNextQuestion = () => {
+    if (selectedActionIndex !== null) {
+      const selectedAction = gameState.questions[gameState.currentQuestionIndex].actions[selectedActionIndex];
+      
+      // Update game state
+      dispatch(updateGameState({
+        effortPoints: gameState.effortPoints - selectedAction.effort,
+        impactPoints: gameState.impactPoints + selectedAction.impact,
+        currentYear: gameState.currentYear + 1,
+      }));
+
+      if (gameState.currentQuestionIndex < gameState.questions.length - 1) {
+        dispatch(setCurrentQuestionIndex(gameState.currentQuestionIndex + 1));
+        setSelectedActionIndex(null);
+      } else {
+        navigate('/result');
+      }
     } else {
-      // Game over, navigate to ResultPage
-      navigate('/result');
+      alert("Please select an action before proceeding.");
     }
   };
 
+  const currentQuestion = gameState.questions[gameState.currentQuestionIndex];
+
   return (
-    <div className="game-play-page">
-      <div className="left-column">
-        <div className="trackers">
-          <EffortMeter editable={false} />
-          <ImpactMeter editable={false} />
-          <TimeMeter editable={false} />
-          <Rewards editable={false} />
-        </div>
-      </div>
-      <div className="main-content">
-        <h1>Game Play</h1>
-        <div className="question-counter">
-          Question {currentQuestionIndex + 1} of {questions.length}
-        </div>
+    <Box sx={{ display: 'flex', flexDirection: 'column', p: 3 }}>
+      <Typography variant="h4" gutterBottom>{gameState.name || 'Game Play'}</Typography>
+      {gameState.description && (
+        <Typography variant="body1" gutterBottom>{gameState.description}</Typography>
+      )}
+      <Box sx={{ display: 'flex', gap: 3, mb: 3 }}>
+        <EffortMeter />
+        <ImpactMeter />
+        <TimeMeter />
+        <Rewards />
+      </Box>
+      <Box sx={{ flexGrow: 1 }}>
         <ActionList
-          questionIndex={currentQuestionIndex}
+          questionIndex={gameState.currentQuestionIndex}
           editable={false}
-          onNextQuestion={handleNextQuestion}
+          initialQuestion={currentQuestion.question}
+          initialActions={currentQuestion.actions}
+          selectedActionIndex={selectedActionIndex}
+          setSelectedActionIndex={handleActionSelect}
         />
-      </div>
-    </div>
+        <Button 
+          variant="contained" 
+          color="primary" 
+          onClick={handleNextQuestion}
+          disabled={selectedActionIndex === null}
+          sx={{ mt: 2 }}
+        >
+          {gameState.currentQuestionIndex < gameState.questions.length - 1 ? "Next Question" : "Finish Game"}
+        </Button>
+      </Box>
+    </Box>
   );
 };
 

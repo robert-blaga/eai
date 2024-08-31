@@ -39,3 +39,21 @@
 .add-question-button:hover {
   background-color: #f57c00;
 }
+
+.home-link {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  text-decoration: none;
+  color: #333;
+  font-weight: bold;
+  padding: 5px 10px;
+  border: 1px solid #333;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+.home-link:hover {
+  background-color: #333;
+  color: #fff;
+}

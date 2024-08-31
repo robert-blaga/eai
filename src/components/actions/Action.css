@@ -1,43 +1,49 @@
 .action {
-  background-color: white;
+  background-color: #ffffff;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
   padding: 15px;
-  margin-bottom: 10px;
-  border-radius: 5px;
+  margin-bottom: 15px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   transition: background-color 0.3s ease;
+  cursor: pointer;
+}
+
+.action:hover {
+  background-color: #f5f5f5;
+}
+
+.action.selected {
+  background-color: #e3f2fd;
+  border-color: #2196f3;
 }
 
 .action-text {
   flex-grow: 1;
+  margin-right: 15px;
 }
 
-.action select, .action button {
-  margin-left: 10px;
+.action-metrics {
+  display: flex;
+  align-items: center;
 }
 
-.action-effort, .action-impact {
-  margin-left: 10px;
-  font-size: 14px;
-  color: #666;
+.action-effort,
+.action-impact {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-left: 15px;
 }
 
-.bold {
-  font-weight: bold;
+.action-effort input,
+.action-impact input {
+  width: 60px;
+  text-align: center;
 }
 
-.action.selected {
-  background-color: #e6f7ff;
-  border: 1px solid #1890ff;
-}
-
-.action button:disabled {
-  background-color: #d9d9d9;
-  cursor: not-allowed;
-}
-
-.action button.selected {
-  background-color: #1890ff;
-  color: white;
+.action input[type="text"] {
+  width: 100%;
 }

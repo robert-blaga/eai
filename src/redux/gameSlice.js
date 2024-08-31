@@ -22,7 +22,8 @@ const initialState = {
       ]
     }
   ],
-  currentQuestionIndex: 0
+  currentQuestionIndex: 0,
+  savedGames: []
 };
 
 export const gameSlice = createSlice({
@@ -101,6 +102,27 @@ export const gameSlice = createSlice({
     updateQuestionParagraph: (state, action) => {
       const { index, paragraph } = action.payload;
       state.questions[index].questionParagraph = paragraph;
+    },
+    saveGame: (state, action) => {
+      const { name, description, state: gameState } = action.payload;
+      state.savedGames.push({ name, description, state: gameState });
+    },
+    loadGame: (state, action) => {
+      const loadedState = action.payload;
+      return { ...state, ...loadedState, savedGames: state.savedGames };
+    },
+    resetGame: (state) => {
+      return { ...initialState, savedGames: state.savedGames };
+    },
+    updateGame: (state, action) => {
+      const { index, updatedGame } = action.payload;
+      state.savedGames[index] = updatedGame;
+    },
+    updateGameState: (state, action) => {
+      const { effortPoints, impactPoints, currentYear } = action.payload;
+      state.effortPoints = effortPoints;
+      state.impactPoints = impactPoints;
+      state.currentYear = currentYear;
     }
   },
 });
@@ -126,7 +148,12 @@ export const {
   updateQuestion, 
   updateQuestionActions, 
   setCurrentQuestionIndex, 
-  updateQuestionParagraph
+  updateQuestionParagraph,
+  saveGame,
+  loadGame,
+  resetGame,
+  updateGame,
+  updateGameState
 } = gameSlice.actions;
 
 export default gameSlice.reducer;
