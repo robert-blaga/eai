@@ -1,12 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { Box, Typography, Button } from '@mui/material';
-import { updateQuestionActions } from '../../redux/gameSlice';
+import { Box, Typography, Button, TextField } from '@mui/material';
+import { updateQuestionActions, updateQuestionParagraph, updateQuestionTitle } from '../../redux/gameSlice';
 import Action from './Action';
 import './ActionList.css';
 
 const ActionList = ({ questionIndex, editable, initialQuestion, initialActions, selectedActionIndex, setSelectedActionIndex }) => {
   const dispatch = useDispatch();
+  const [questionTitle, setQuestionTitle] = useState(initialQuestion.title || '');
+  const [questionParagraph, setQuestionParagraph] = useState(initialQuestion.questionParagraph || '');
 
   const handleActionChange = (index, field, value) => {
     const updatedActions = initialActions.map((action, i) => 
@@ -21,9 +23,43 @@ const ActionList = ({ questionIndex, editable, initialQuestion, initialActions, 
     }
   };
 
+  const handleParagraphChange = (e) => {
+    setQuestionParagraph(e.target.value);
+    dispatch(updateQuestionParagraph({ index: questionIndex, paragraph: e.target.value }));
+  };
+
+  const handleTitleChange = (e) => {
+    setQuestionTitle(e.target.value);
+    dispatch(updateQuestionTitle({ index: questionIndex, title: e.target.value }));
+  };
+
   return (
     <Box className="action-list">
-      <Typography variant="h6" gutterBottom>{initialQuestion}</Typography>
+      {editable ? (
+        <TextField
+          value={questionTitle}
+          onChange={handleTitleChange}
+          placeholder="Type question title here..."
+          className="question-title-input"
+          fullWidth
+        />
+      ) : (
+        <Typography variant="h6" gutterBottom className="question-title">
+          {questionTitle}
+        </Typography>
+      )}
+      {editable ? (
+        <textarea
+          value={questionParagraph}
+          onChange={handleParagraphChange}
+          placeholder="Type context for the question here..."
+          className="question-paragraph-textarea"
+        />
+      ) : (
+        <Typography variant="body1" gutterBottom className="question-paragraph">
+          {questionParagraph}
+        </Typography>
+      )}
       {initialActions.map((action, index) => (
         <Action
           key={index}

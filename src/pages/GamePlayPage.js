@@ -59,7 +59,7 @@ const GamePlayPage = () => {
         <ActionList
           questionIndex={gameState.currentQuestionIndex}
           editable={false}
-          initialQuestion={currentQuestion.question}
+          initialQuestion={currentQuestion}
           initialActions={currentQuestion.actions}
           selectedActionIndex={selectedActionIndex}
           setSelectedActionIndex={handleActionSelect}

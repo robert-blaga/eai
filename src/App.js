@@ -15,7 +15,7 @@ function App() {
     <Router>
       <Box sx={{ display: 'flex' }}>
         <NavMenu />
-        <Box component="main" sx={{ flexGrow: 1, p: 3, marginLeft: '280px' }}>
+        <Box component="main" sx={{ flexGrow: 1, display: 'flex', justifyContent: 'center', alignItems: 'center', p: 3 }}>
           <Routes>
             <Route path="/" element={<LandingPage />} />
             <Route path="/setup" element={<GameSetupPage />} />

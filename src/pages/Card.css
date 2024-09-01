@@ -1,0 +1,50 @@
+.custom-card {
+  background-color: white;
+  border: 1px solid black;
+  border-radius: 8px;
+  padding: 10px 20px;
+  font-family: 'Poppins', sans-serif;
+  width: 100%;
+  box-shadow: none;
+  margin-bottom: 20px; /* Add space between cards */
+}
+
+.custom-card .card-title {
+  font-size: 12px; /* Ensure the title font size is small */
+  display: flex;
+  align-items: center;
+}
+
+.custom-card .card-title .MuiSvgIcon-root {
+  margin-right: 5px; /* Add space between icon and text */
+}
+
+.custom-input {
+  border: none;
+  outline: none;
+  box-shadow: none;
+}
+
+.custom-input:focus {
+  border: none;
+  outline: none;
+  box-shadow: none;
+}
+
+.action-list-container {
+  padding: 0; /* Remove padding to align with the title */
+}
+
+.custom-card .game-name-input {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 900;
+  font-size: 18px;
+}
+
+.custom-card .game-description-input {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+}
+
+

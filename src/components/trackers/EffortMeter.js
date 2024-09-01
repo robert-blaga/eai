@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { setEffortName, setEffortPoints, setPointsName } from '../../redux/gameSlice';
 import './Trackers.css';
 
+
 const EffortMeter = ({ editable = false }) => {
   const dispatch = useDispatch();
   const { effortName, effortPoints, pointsName } = useSelector(state => state.game);

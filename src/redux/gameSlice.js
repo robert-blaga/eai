@@ -103,6 +103,10 @@ export const gameSlice = createSlice({
       const { index, paragraph } = action.payload;
       state.questions[index].questionParagraph = paragraph;
     },
+    updateQuestionTitle: (state, action) => {
+      const { index, title } = action.payload;
+      state.questions[index].title = title;
+    },
     saveGame: (state, action) => {
       const { name, description, state: gameState } = action.payload;
       state.savedGames.push({ name, description, state: gameState });
@@ -153,7 +157,8 @@ export const {
   loadGame,
   resetGame,
   updateGame,
-  updateGameState
+  updateGameState,
+  updateQuestionTitle
 } = gameSlice.actions;
 
 export default gameSlice.reducer;

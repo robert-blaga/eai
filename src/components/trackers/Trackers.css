@@ -142,3 +142,19 @@
 .editable-input:read-only {
   cursor: default;
 }
+
+.tracker.effort-meter {
+  background-color: #deffd6;
+}
+
+.tracker.impact-meter {
+  background-color: #ffcccb;
+}
+
+.tracker.time-meter {
+  background-color: #e6e6fa;
+}
+
+.tracker.rewards {
+  background-color: #fff1e5;
+}

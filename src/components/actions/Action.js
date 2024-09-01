@@ -5,12 +5,25 @@ import './Action.css';
 const Action = ({ text, effort, impact, onSelect, editable, onTextChange, onEffortChange, onImpactChange, isSelected }) => {
   const { effortName } = useSelector(state => state.game);
 
+  const handleEffortChange = (e) => {
+    const value = e.target.value;
+    if (!isNaN(value) || value === '' || value === '-') {
+      onEffortChange(value === '' || value === '-' ? value : Number(value));
+    }
+  };
+
+  const handleImpactChange = (e) => {
+    const value = e.target.value;
+    if (!isNaN(value) || value === '' || value === '-') {
+      onImpactChange(value === '' || value === '-' ? value : Number(value));
+    }
+  };
+
   return (
     <div className={`action ${isSelected ? 'selected' : ''}`} onClick={onSelect}>
       <div className="action-text">
         {editable ? (
-          <input 
-            type="text" 
+          <textarea 
             value={text} 
             onChange={(e) => onTextChange(e.target.value)} 
             className="editable"
@@ -19,30 +32,34 @@ const Action = ({ text, effort, impact, onSelect, editable, onTextChange, onEffo
           text
         )}
       </div>
-      <div className="action-effort">
-        <span className="effort-label">{effortName}</span>
-        {editable ? (
-          <input 
-            type="number" 
-            value={effort} 
-            onChange={(e) => onEffortChange(Number(e.target.value))} 
-            className="editable effort-value"
-          />
-        ) : (
-          <span className="effort-value">{effort}</span>
-        )}
-      </div>
-      {editable && (
-        <div className="action-impact">
-          Impact: 
-          <input 
-            type="number" 
-            value={impact} 
-            onChange={(e) => onImpactChange(Number(e.target.value))} 
-            className="editable"
-          />
+      <div className="action-metrics">
+        <div className="action-effort">
+          <span className="effort-label">{effortName}</span>
+          {editable ? (
+            <input 
+              type="text" 
+              value={effort} 
+              onChange={handleEffortChange} 
+              className="editable effort-value"
+            />
+          ) : (
+            <span className="effort-value">{effort}</span>
+          )}
         </div>
-      )}
+        <div className="action-impact">
+          <span className="impact-label">Impact</span>
+          {editable ? (
+            <input 
+              type="text" 
+              value={impact} 
+              onChange={handleImpactChange} 
+              className="editable impact-value"
+            />
+          ) : (
+            <span className="impact-value">{impact}</span>
+          )}
+        </div>
+      </div>
     </div>
   );
 };

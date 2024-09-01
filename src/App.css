@@ -6,13 +6,14 @@
 
 .main-content {
   flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 /* Remove padding for the dashboard page */
 .main-content > div {
   padding: 0;
 }
-
-
 
 /* Add any other global styles here */
