@@ -42,6 +42,31 @@ const ActionList = ({ questionIndex, editable, initialQuestion, initialActions, 
           placeholder="Type question title here..."
           className="question-title-input"
           fullWidth
+          InputProps={{ 
+            disableUnderline: true, // Disable underline
+            style: { 
+              border: 'none', 
+              padding: 0, 
+              fontFamily: 'Poppins, sans-serif', 
+              fontSize: '18px', 
+              fontWeight: 700, 
+              color: '#333', 
+              marginBottom: '10px' 
+            } // Remove border and padding, apply styles
+          }}
+          sx={{
+            '& .MuiOutlinedInput-root': {
+              '& fieldset': {
+                border: 'none', // Remove border
+              },
+              '&.Mui-focused fieldset': {
+                border: 'none', // Remove border when focused
+              },
+            },
+            '& .MuiInputBase-input': {
+              padding: 0, // Remove padding from input element
+            },
+          }}
         />
       ) : (
         <Typography variant="h6" gutterBottom className="question-title">

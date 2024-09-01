@@ -145,16 +145,23 @@
 
 .tracker.effort-meter {
   background-color: #deffd6;
+  margin-right: 10px;
+  height: 50px;
 }
 
 .tracker.impact-meter {
   background-color: #ffcccb;
+  margin-right: 10px;
+  height: 50px;
 }
 
 .tracker.time-meter {
   background-color: #e6e6fa;
+  margin-right: 10px;
+  height: 50px;
 }
 
 .tracker.rewards {
   background-color: #fff1e5;
+  height: 50px;
 }

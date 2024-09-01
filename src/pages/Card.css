@@ -10,7 +10,7 @@
 }
 
 .custom-card .card-title {
-  font-size: 12px; /* Ensure the title font size is small */
+  font-size: 12px; /* Card title font size */
   display: flex;
   align-items: center;
 }
