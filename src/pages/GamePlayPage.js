@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Button } from '@mui/material';
 import EffortMeter from '../components/trackers/EffortMeter';
@@ -6,7 +6,7 @@ import ImpactMeter from '../components/trackers/ImpactMeter';
 import TimeMeter from '../components/trackers/TimeMeter';
 import Rewards from '../components/trackers/Rewards';
 import ActionList from '../components/actions/ActionList';
-import { setCurrentQuestionIndex, updateGameState } from '../redux/gameSlice';
+import { setCurrentQuestionIndex, updateGameState, updateRewardProgress, checkAndAwardRewards, resetGameProgress } from '../redux/gameSlice';
 import { useNavigate } from 'react-router-dom';
 
 const GamePlayPage = () => {
@@ -14,6 +14,10 @@ const GamePlayPage = () => {
   const navigate = useNavigate();
   const gameState = useSelector(state => state.game);
   const [selectedActionIndex, setSelectedActionIndex] = useState(null);
+
+  useEffect(() => {
+    dispatch(resetGameProgress());
+  }, [dispatch]);
 
   const handleActionSelect = (actionIndex) => {
     setSelectedActionIndex(actionIndex);
@@ -29,6 +33,14 @@ const GamePlayPage = () => {
         impactPoints: gameState.impactPoints + selectedAction.impact,
         currentYear: gameState.currentYear + 1,
       }));
+
+      // Update reward progress
+      if (selectedAction.reward) {
+        dispatch(updateRewardProgress({ rewardName: selectedAction.reward }));
+      }
+
+      // Check and award rewards
+      dispatch(checkAndAwardRewards());
 
       if (gameState.currentQuestionIndex < gameState.questions.length - 1) {
         dispatch(setCurrentQuestionIndex(gameState.currentQuestionIndex + 1));
@@ -66,6 +78,7 @@ const GamePlayPage = () => {
                 initialActions={gameState.questions[gameState.currentQuestionIndex].actions}
                 onActionSelect={handleActionSelect}
                 selectedActionIndex={selectedActionIndex}
+                showReward={true}
               />
             </div>
             <Button onClick={handleNextQuestion} className="add-question-button" disabled={selectedActionIndex === null}>

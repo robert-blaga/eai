@@ -29,7 +29,7 @@ export const deleteGame = createAsyncThunk('game/deleteGame', async (id) => {
   return id;
 });
 
-const initialState = {
+  const initialState = {
   effortName: 'Effort',
   effortPoints: 100,
   pointsName: 'pts',
@@ -52,7 +52,10 @@ const initialState = {
     }
   ],
   currentQuestionIndex: 0,
-  savedGames: []
+  savedGames: [],
+  rewards: [],
+  rewardProgress: {},
+  earnedRewards: [],
 };
 
 export const gameSlice = createSlice({
@@ -127,7 +130,34 @@ export const gameSlice = createSlice({
     },
     deleteQuestion: (state, action) => {
       state.questions.splice(action.payload, 1);
-    }
+    },
+    updateRewards: (state, action) => {
+      state.rewards = action.payload;
+    },
+    updateRewardProgress: (state, action) => {
+      const { rewardName } = action.payload;
+      if (!state.rewardProgress[rewardName]) {
+        state.rewardProgress[rewardName] = 0;
+      }
+      state.rewardProgress[rewardName]++;
+    },
+    checkAndAwardRewards: (state) => {
+      state.rewards.forEach(reward => {
+        if (state.rewardProgress[reward.name] >= reward.requiredNumber && !state.earnedRewards.includes(reward.name)) {
+          state.earnedRewards.push(reward.name);
+          state.rewardsCount++;
+        }
+      });
+    },
+    resetGameProgress: (state) => {
+      state.currentQuestionIndex = 0;
+      state.effortPoints = state.initialEffortPoints;
+      state.impactPoints = 0;
+      state.currentYear = state.startYear;
+      state.rewardsCount = 0;
+      state.earnedRewards = [];
+      state.rewardProgress = {};
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -168,7 +198,11 @@ export const {
   setCurrentQuestionIndex, 
   loadGame, 
   updateGameState,
-  deleteQuestion
+  deleteQuestion,
+  updateRewards,
+  updateRewardProgress,
+  checkAndAwardRewards,
+  resetGameProgress
 } = gameSlice.actions;
 
 export default gameSlice.reducer;

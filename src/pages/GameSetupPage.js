@@ -50,6 +50,8 @@ const GameSetupPage = () => {
           ...gameState,
           name: gameName,
           description: gameDescription,
+          initialEffortPoints: gameState.effortPoints,
+          startYear: gameState.currentYear,
         };
         if (gameState.id) {
           await dispatch(updateGame({ id: gameState.id, gameData })).unwrap();

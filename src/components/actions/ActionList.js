@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Card, Input, TextareaAutosize, Button, Box, IconButton } from '@mui/material';
 import { Plus } from 'lucide-react';
 import Action from './Action';
@@ -7,10 +7,16 @@ import { updateQuestionActions, updateQuestionParagraph, updateQuestionTitle, de
 import HelpIcon from '@mui/icons-material/Help';
 import DeleteIcon from '@mui/icons-material/Delete';
 
-const ActionList = ({ questionIndex, editable, initialQuestion, initialActions, onActionSelect, selectedActionIndex }) => {
+const ActionList = ({ questionIndex, editable, initialQuestion, initialActions, onActionSelect, selectedActionIndex, showReward = false }) => {
   const dispatch = useDispatch();
+  const rewards = useSelector(state => state.game.rewards);
   const [questionTitle, setQuestionTitle] = useState(initialQuestion.title || '');
   const [questionParagraph, setQuestionParagraph] = useState(initialQuestion.questionParagraph || '');
+
+  useEffect(() => {
+    setQuestionTitle(initialQuestion.title || '');
+    setQuestionParagraph(initialQuestion.questionParagraph || '');
+  }, [initialQuestion]);
 
   const handleActionChange = (index, field, value) => {
     const updatedActions = initialActions.map((action, i) => 
@@ -20,13 +26,15 @@ const ActionList = ({ questionIndex, editable, initialQuestion, initialActions, 
   };
 
   const handleParagraphChange = (e) => {
-    setQuestionParagraph(e.target.value);
-    dispatch(updateQuestionParagraph({ index: questionIndex, paragraph: e.target.value }));
+    const newParagraph = e.target.value;
+    setQuestionParagraph(newParagraph);
+    dispatch(updateQuestionParagraph({ index: questionIndex, paragraph: newParagraph }));
   };
 
   const handleTitleChange = (e) => {
-    setQuestionTitle(e.target.value);
-    dispatch(updateQuestionTitle({ index: questionIndex, title: e.target.value }));
+    const newTitle = e.target.value;
+    setQuestionTitle(newTitle);
+    dispatch(updateQuestionTitle({ index: questionIndex, title: newTitle }));
   };
 
   const handleDeleteQuestion = () => {
@@ -35,6 +43,31 @@ const ActionList = ({ questionIndex, editable, initialQuestion, initialActions, 
 
   const handleDeleteAction = (actionIndex) => {
     const updatedActions = initialActions.filter((_, index) => index !== actionIndex);
+    dispatch(updateQuestionActions({ questionIndex, actions: updatedActions }));
+  };
+
+  const handleRewardChange = (actionIndex, newReward) => {
+    const updatedActions = initialActions.map((action, index) => 
+      index === actionIndex ? { ...action, reward: newReward } : action
+    );
+    dispatch(updateQuestionActions({ questionIndex, actions: updatedActions }));
+  };
+
+  const handleEffortChange = (actionIndex, newEffort) => {
+    const numEffort = Number(newEffort);
+    const validEffort = !isNaN(numEffort) ? Math.max(-1000, Math.min(1000, numEffort)) : 0;
+    const updatedActions = initialActions.map((action, index) => 
+      index === actionIndex ? { ...action, effort: validEffort } : action
+    );
+    dispatch(updateQuestionActions({ questionIndex, actions: updatedActions }));
+  };
+
+  const handleImpactChange = (actionIndex, newImpact) => {
+    const numImpact = Number(newImpact);
+    const validImpact = !isNaN(numImpact) ? Math.max(-1000, Math.min(1000, numImpact)) : 0;
+    const updatedActions = initialActions.map((action, index) => 
+      index === actionIndex ? { ...action, impact: validImpact } : action
+    );
     dispatch(updateQuestionActions({ questionIndex, actions: updatedActions }));
   };
 
@@ -113,13 +146,17 @@ const ActionList = ({ questionIndex, editable, initialQuestion, initialActions, 
                 text={action.text}
                 effort={action.effort}
                 impact={action.impact}
+                reward={action.reward}
                 editable={editable}
                 onTextChange={(value) => handleActionChange(index, 'text', value)}
-                onEffortChange={(value) => handleActionChange(index, 'effort', value)}
-                onImpactChange={(value) => handleActionChange(index, 'impact', value)}
+                onEffortChange={(newEffort) => handleEffortChange(index, newEffort)}
+                onImpactChange={(newImpact) => handleImpactChange(index, newImpact)}
+                onRewardChange={(newReward) => handleRewardChange(index, newReward)}
                 onSelect={() => onActionSelect && onActionSelect(index)}
                 isSelected={selectedActionIndex === index}
                 onDelete={() => handleDeleteAction(index)}
+                availableRewards={rewards}
+                showReward={showReward}
               />
             ))}
           </div>
