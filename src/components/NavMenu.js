@@ -1,83 +1,71 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Drawer, List, ListItem, ListItemIcon, ListItemText, Typography, styled } from '@mui/material';
+import { AppBar, Toolbar, IconButton, Box } from '@mui/material';
 import { Home, Settings, Gamepad, Dashboard, LibraryBooks } from '@mui/icons-material';
 
-const drawerWidth = 300;
-
 const menuItems = [
-  { text: 'Home', icon: <Home />, path: '/' },
-  { text: 'Dashboard', icon: <Dashboard />, path: '/dashboard' },
-  { text: 'Create', icon: <Settings />, path: '/setup' },
-  { text: 'Play', icon: <Gamepad />, path: '/play' },
-  { text: 'Library', icon: <LibraryBooks />, path: '/library' },
+  { icon: <Home />, path: '/' },
+  { icon: <Dashboard />, path: '/dashboard' },
+  { icon: <Settings />, path: '/setup' },
+  { icon: <Gamepad />, path: '/play' },
+  { icon: <LibraryBooks />, path: '/library' },
 ];
-
-const StyledListItem = styled(ListItem)(({ theme, selected }) => ({
-  borderRadius: 99,
-  margin: '4px 16px',
-  padding: '12px 16px', // Reduced padding
-  width: '240px',
-  '&:hover, &.Mui-selected': {
-    backgroundColor: '#EEF2FF',
-    '& .MuiListItemIcon-root, & .MuiListItemText-primary': {
-      color: '#4F46E5',
-    },
-  },
-  '& .MuiListItemIcon-root': {
-    minWidth: 32, // Reduced minWidth
-    color: selected ? '#4F46E5' : '#64748B',
-  },
-  '& .MuiListItemText-primary': {
-    color: selected ? '#4F46E5' : '#64748B',
-    fontFamily: 'Poppins, sans-serif',
-    fontWeight: 500,
-    fontSize: 18,
-  },
-  ...(selected && {
-    backgroundColor: '#EEF2FF',
-  }),
-}));
 
 const NavMenu = () => {
   const location = useLocation();
 
   return (
-    <Drawer
-      sx={{
-        width: drawerWidth,
-        flexShrink: 0,
-        '& .MuiDrawer-paper': {
-          width: drawerWidth,
-          boxSizing: 'border-box',
-          backgroundColor: 'white',
-          color: 'gray',
-        },
+    <AppBar 
+      position="fixed" 
+      color="transparent" 
+      elevation={0} 
+      sx={{ 
+        backgroundColor: 'white',
+        borderBottom: '1px solid #e0e0e0',
+        top: 0,
+        left: 0,
+        right: 0,
+        height: '40px',
       }}
-      variant="permanent"
-      anchor="left"
     >
-      <Typography variant="h6" sx={{ my: 2, textAlign: 'left', color: 'black', fontFamily: 'Poppins, sans-serif', fontWeight: 900, fontSize: 20, marginLeft: 4 }}>
-        Build cool stuff
-      </Typography>
-      <List>
-        {menuItems.map((item) => {
-          const isSelected = location.pathname === item.path;
-          return (
-            <StyledListItem
-              button
-              key={item.text}
-              component={Link}
-              to={item.path}
-              selected={isSelected}
-            >
-              <ListItemIcon>{item.icon}</ListItemIcon>
-              <ListItemText primary={item.text} />
-            </StyledListItem>
-          );
-        })}
-      </List>
-    </Drawer>
+      <Toolbar 
+        disableGutters 
+        sx={{ 
+          height: '100%', 
+          minHeight: '40px !important',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+      >
+        <Box sx={{ display: 'flex', height: '100%', alignItems: 'center' }}>
+          {menuItems.map((item) => {
+            const isSelected = location.pathname === item.path;
+            return (
+              <IconButton
+                key={item.path}
+                component={Link}
+                to={item.path}
+                color={isSelected ? 'primary' : 'default'}
+                sx={{ 
+                  mx: 1,
+                  padding: '4px',
+                  height: '32px',
+                  width: '32px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
+                <Box component="span" sx={{ display: 'flex', '& > svg': { fontSize: '1.2rem' } }}>
+                  {item.icon}
+                </Box>
+              </IconButton>
+            );
+          })}
+        </Box>
+      </Toolbar>
+    </AppBar>
   );
 };
 

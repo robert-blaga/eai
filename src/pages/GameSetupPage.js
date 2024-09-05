@@ -1,33 +1,70 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Typography, Button, TextField, Card, CardContent } from '@mui/material';
-import { Settings, BarChart, ListAlt } from '@mui/icons-material'; // Import the icons
+import { useNavigate } from 'react-router-dom';
+import { Button } from "../components/ui/button";
+import GameInfo from '../components/GameInfo';
 import EffortMeter from '../components/trackers/EffortMeter';
 import ImpactMeter from '../components/trackers/ImpactMeter';
 import TimeMeter from '../components/trackers/TimeMeter';
 import Rewards from '../components/trackers/Rewards';
 import ActionList from '../components/actions/ActionList';
-import { addQuestion, saveGame, resetGame } from '../redux/gameSlice';
-import './GameSetupPage.css';
-import './Card.css'; // Import the new CSS file for cards
+import { addQuestion, saveGame, updateGame, setEffortName, setImpactName, setTimeName } from '../redux/gameSlice';
+import { Save } from 'lucide-react'; // Import Save icon from lucide-react
+import IconButton from '@mui/material/IconButton';
 
 const GameSetupPage = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const gameState = useSelector(state => state.game);
+  
   const [gameName, setGameName] = useState('');
   const [gameDescription, setGameDescription] = useState('');
+  const [isSaving, setIsSaving] = useState(false);
+
+  useEffect(() => {
+    setGameName(gameState.name || '');
+    setGameDescription(gameState.description || '');
+  }, [gameState]);
 
   const handleAddQuestion = () => {
     dispatch(addQuestion());
   };
 
-  const handleSaveGame = () => {
+  const handleEffortNameChange = (name) => {
+    dispatch(setEffortName(name));
+  };
+
+  const handleImpactNameChange = (name) => {
+    dispatch(setImpactName(name));
+  };
+
+  const handleTimeNameChange = (name) => {
+    dispatch(setTimeName(name));
+  };
+
+  const handleSaveGame = async () => {
     if (gameName) {
-      dispatch(saveGame({ name: gameName, description: gameDescription, state: gameState }));
-      alert("Game saved successfully!");
-      dispatch(resetGame());
-      setGameName('');
-      setGameDescription('');
+      setIsSaving(true);
+      try {
+        const gameData = {
+          ...gameState,
+          name: gameName,
+          description: gameDescription,
+        };
+        if (gameState.id) {
+          await dispatch(updateGame({ id: gameState.id, gameData })).unwrap();
+          alert("Game updated successfully!");
+        } else {
+          await dispatch(saveGame(gameData)).unwrap();
+          alert("Game saved successfully!");
+        }
+        navigate('/library');
+      } catch (error) {
+        console.error("Error saving game: ", error);
+        alert("Error saving game. Please try again.");
+      } finally {
+        setIsSaving(false);
+      }
     } else {
       alert("Please enter a name for your game.");
     }
@@ -35,74 +72,50 @@ const GameSetupPage = () => {
 
   return (
     <div className="game-setup-page">
-      <div className="header-container">
-        <Button variant="contained" color="secondary" onClick={handleSaveGame} className="save-game-button">
-          Save Game
-        </Button>
-      </div>
       <div className="content-container">
-        <Card className="custom-card">
-          <CardContent>
-            <Typography variant="h6" gutterBottom className="card-title">
-              <Settings fontSize="small" /> General
-            </Typography>
-            <TextField
-              label="Game Name"
-              value={gameName}
-              onChange={(e) => setGameName(e.target.value)}
-              fullWidth
-              InputProps={{ className: 'custom-input game-name-input' }} // Updated class name
-              sx={{ mb: 2 }}
-            />
-            <TextField
-              label="Game Description"
-              value={gameDescription}
-              onChange={(e) => setGameDescription(e.target.value)}
-              multiline
-              rows={2} // Set default rows to 2
-              fullWidth
-              InputProps={{ className: 'custom-input game-description-input' }} // Updated class name
-              sx={{ mb: 2 }}
-            />
-          </CardContent>
-        </Card>
-        <Card className="custom-card">
-          <CardContent>
-            <Typography variant="h6" gutterBottom className="card-title">
-              <BarChart fontSize="small" /> Stats
-            </Typography>
+        <div className="sidebar">
+          <GameInfo
+            gameName={gameName}
+            gameDescription={gameDescription}
+            onNameChange={setGameName}
+            onDescriptionChange={setGameDescription}
+          />
+          <div className="section">
+            <h5>Trackers</h5>
             <div className="trackers">
-              <EffortMeter editable={true} className="tracker-1" />
-              <ImpactMeter editable={true} className="tracker-2" />
-              <TimeMeter editable={true} className="tracker-3" />
-              <Rewards editable={true} className="tracker-4" />
+              <div className="tracker-container">
+                <EffortMeter editable={true} onNameChange={handleEffortNameChange} />
+              </div>
+              <div className="tracker-container">
+                <ImpactMeter editable={true} onNameChange={handleImpactNameChange} />
+              </div>
+              <div className="tracker-container">
+                <TimeMeter editable={true} onNameChange={handleTimeNameChange} />
+              </div>
+              <div className="tracker-container">
+                <Rewards editable={true} />
+              </div>
             </div>
-          </CardContent>
-        </Card>
-        <Card className="custom-card">
-          <CardContent>
-            <Typography variant="h6" gutterBottom className="card-title">
-              <ListAlt fontSize="small" /> Actions
-            </Typography>
-            <div className="main-content action-list-container">
-              {gameState.questions.map((questionData, index) => (
-                <ActionList
-                  key={index}
-                  questionIndex={index}
-                  editable={true}
-                  initialQuestion={questionData}
-                  initialActions={questionData.actions}
-                />
+          </div>
+        </div>
+        <div className="main-content">
+          <div className="section">
+            <div className="questions-container">
+              {gameState.questions.map((question, index) => (
+                <ActionList key={index} questionIndex={index} editable={true} initialQuestion={question} initialActions={question.actions} />
               ))}
-              <Button variant="contained" color="primary" onClick={handleAddQuestion} className="add-question-button">
-                Add New Question
-              </Button>
             </div>
-          </CardContent>
-        </Card>
+            <Button onClick={handleAddQuestion} className="add-question-button">
+              Add Question
+            </Button>
+          </div>
+        </div>
       </div>
+      <IconButton onClick={handleSaveGame} disabled={isSaving} className="save-game-icon" style={{ position: 'fixed', bottom: '20px', right: '20px', backgroundColor: '#CCFFCC', color: 'CCFFCC' }}>
+        <Save />
+      </IconButton>
     </div>
   );
-};
+}
 
 export default GameSetupPage;

@@ -1,7 +1,8 @@
 import React, { useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { setImpactName, setImpactPoints, setImpactPointsName } from '../../redux/gameSlice';
-import './Trackers.css';
+import { Box, Typography, LinearProgress } from '@mui/material';
+import { GpsFixed as TargetIcon } from '@mui/icons-material';
 
 const ImpactMeter = ({ editable = false }) => {
   const dispatch = useDispatch();
@@ -33,7 +34,7 @@ const ImpactMeter = ({ editable = false }) => {
         contentEditable={editable}
         onBlur={() => handleBlur(field)}
         suppressContentEditableWarning={true}
-        className="editable-content"
+        style={{ minWidth: '20px', display: 'inline-block' }}
       >
         {value}
       </span>
@@ -41,22 +42,39 @@ const ImpactMeter = ({ editable = false }) => {
   };
 
   const maxImpact = 100;
-  const filledWidth = (impactPoints / maxImpact) * 100;
+  const progress = (impactPoints / maxImpact) * 100;
 
   return (
-    <div className="tracker impact-meter">
-      <div className="tracker-content">
-        <span className="tracker-label">
-          {renderEditable('name', impactName, nameRef)}
-        </span>
-        <span className="tracker-value">
+    <Box sx={{ 
+      border: '2px solid #000000', 
+      borderRadius: '8px', 
+      padding: '15px', 
+      backgroundColor: '#ffffff'
+    }}>
+      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 1 }}>
+        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+          <TargetIcon sx={{ color: '#000000', mr: 1 }} />
+          <Typography variant="subtitle1" component="div" sx={{ fontWeight: 'bold', color: '#000000' }}>
+            {renderEditable('name', impactName, nameRef)}
+          </Typography>
+        </Box>
+        <Typography variant="body1" sx={{ color: '#000000' }}>
           {renderEditable('points', impactPoints, pointsRef)} {renderEditable('pointsName', impactPointsName, pointsNameRef)}
-        </span>
-      </div>
-      <div className="tracker-bar impact-bar">
-        <div className="tracker-bar-filled impact-bar-filled" style={{ width: `${filledWidth}%` }}></div>
-      </div>
-    </div>
+        </Typography>
+      </Box>
+      <LinearProgress 
+        variant="determinate" 
+        value={progress} 
+        sx={{ 
+          height: 10, 
+          borderRadius: 5, 
+          backgroundColor: '#D3D3D3',
+          '& .MuiLinearProgress-bar': {
+            backgroundColor: '#000000'
+          }
+        }} 
+      />
+    </Box>
   );
 };
 

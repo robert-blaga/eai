@@ -1,4 +1,33 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { db } from '../firebase';
+import { collection, addDoc, getDocs, doc, updateDoc, deleteDoc } from 'firebase/firestore';
+
+// Async thunk for fetching games from Firestore
+export const fetchGames = createAsyncThunk('game/fetchGames', async () => {
+  const gamesCollection = collection(db, 'games');
+  const gamesSnapshot = await getDocs(gamesCollection);
+  return gamesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+});
+
+// Async thunk for saving a game to Firestore
+export const saveGame = createAsyncThunk('game/saveGame', async (gameData) => {
+  const { name, description, ...state } = gameData;
+  const docRef = await addDoc(collection(db, 'games'), { name, description, state });
+  return { id: docRef.id, name, description, state };
+});
+
+// Async thunk for updating a game in Firestore
+export const updateGame = createAsyncThunk('game/updateGame', async ({ id, gameData }) => {
+  const { name, description, ...state } = gameData;
+  await updateDoc(doc(db, 'games', id), { name, description, state });
+  return { id, name, description, state };
+});
+
+// Async thunk for deleting a game from Firestore
+export const deleteGame = createAsyncThunk('game/deleteGame', async (id) => {
+  await deleteDoc(doc(db, 'games', id));
+  return id;
+});
 
 const initialState = {
   effortName: 'Effort',
@@ -63,22 +92,6 @@ export const gameSlice = createSlice({
     setRewardsTotal: (state, action) => {
       state.rewardsTotal = action.payload;
     },
-    setDifficulty: (state, action) => {
-      state.difficulty = action.payload;
-    },
-    setQuestion: (state, action) => {
-      state.question = action.payload;
-    },
-    setActions: (state, action) => {
-      state.actions = action.payload;
-    },
-    addAction: (state, action) => {
-      state.actions.push(action.payload);
-    },
-    updateAction: (state, action) => {
-      const { index, updatedAction } = action.payload;
-      state.actions[index] = updatedAction;
-    },
     addQuestion: (state) => {
       state.questions.push({
         question: "New Question",
@@ -88,16 +101,9 @@ export const gameSlice = createSlice({
         ]
       });
     },
-    updateQuestion: (state, action) => {
-      const { index, question } = action.payload;
-      state.questions[index].question = question;
-    },
     updateQuestionActions: (state, action) => {
       const { questionIndex, actions } = action.payload;
       state.questions[questionIndex].actions = actions;
-    },
-    setCurrentQuestionIndex: (state, action) => {
-      state.currentQuestionIndex = action.payload;
     },
     updateQuestionParagraph: (state, action) => {
       const { index, paragraph } = action.payload;
@@ -107,31 +113,44 @@ export const gameSlice = createSlice({
       const { index, title } = action.payload;
       state.questions[index].title = title;
     },
-    saveGame: (state, action) => {
-      const { name, description, state: gameState } = action.payload;
-      state.savedGames.push({ name, description, state: gameState });
+    setCurrentQuestionIndex: (state, action) => {
+      state.currentQuestionIndex = action.payload;
     },
     loadGame: (state, action) => {
-      const loadedState = action.payload;
-      return { ...state, ...loadedState, savedGames: state.savedGames };
-    },
-    resetGame: (state) => {
-      return { ...initialState, savedGames: state.savedGames };
-    },
-    updateGame: (state, action) => {
-      const { index, updatedGame } = action.payload;
-      state.savedGames[index] = updatedGame;
+      return { ...state, ...action.payload.state, name: action.payload.name, description: action.payload.description, id: action.payload.id };
     },
     updateGameState: (state, action) => {
       const { effortPoints, impactPoints, currentYear } = action.payload;
       state.effortPoints = effortPoints;
       state.impactPoints = impactPoints;
       state.currentYear = currentYear;
+    },
+    deleteQuestion: (state, action) => {
+      state.questions.splice(action.payload, 1);
     }
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchGames.fulfilled, (state, action) => {
+        state.savedGames = action.payload;
+      })
+      .addCase(saveGame.fulfilled, (state, action) => {
+        state.savedGames.push(action.payload);
+      })
+      .addCase(updateGame.fulfilled, (state, action) => {
+        const index = state.savedGames.findIndex(game => game.id === action.payload.id);
+        if (index !== -1) {
+          state.savedGames[index] = action.payload;
+        }
+      })
+      .addCase(deleteGame.fulfilled, (state, action) => {
+        state.savedGames = state.savedGames.filter(game => game.id !== action.payload);
+      });
   },
 });
 
 export const { 
+  addQuestion, 
   setEffortName, 
   setEffortPoints, 
   setPointsName, 
@@ -143,22 +162,13 @@ export const {
   setEndYear, 
   setRewardsCount, 
   setRewardsTotal, 
-  setDifficulty, 
-  setQuestion, 
-  setActions, 
-  addAction, 
-  updateAction, 
-  addQuestion, 
-  updateQuestion, 
   updateQuestionActions, 
+  updateQuestionParagraph, 
+  updateQuestionTitle, 
   setCurrentQuestionIndex, 
-  updateQuestionParagraph,
-  saveGame,
-  loadGame,
-  resetGame,
-  updateGame,
+  loadGame, 
   updateGameState,
-  updateQuestionTitle
+  deleteQuestion
 } = gameSlice.actions;
 
 export default gameSlice.reducer;

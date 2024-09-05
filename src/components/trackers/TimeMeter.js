@@ -1,7 +1,8 @@
 import React, { useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { setTimeName, setCurrentYear, setEndYear } from '../../redux/gameSlice';
-import './Trackers.css';
+import { Box, Typography, LinearProgress } from '@mui/material';
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
 
 const TimeMeter = ({ editable = false }) => {
   const dispatch = useDispatch();
@@ -33,7 +34,7 @@ const TimeMeter = ({ editable = false }) => {
         contentEditable={editable}
         onBlur={() => handleBlur(field)}
         suppressContentEditableWarning={true}
-        className="editable-content"
+        style={{ minWidth: '20px', display: 'inline-block' }}
       >
         {value}
       </span>
@@ -41,23 +42,39 @@ const TimeMeter = ({ editable = false }) => {
   };
 
   const totalYears = endYear - startYear;
-  const progress = (currentYear - startYear) / totalYears;
-  const filledWidth = progress * 100;
+  const progress = ((currentYear - startYear) / totalYears) * 100;
 
   return (
-    <div className="tracker time-meter">
-      <div className="tracker-content">
-        <span className="tracker-label">
-          {renderEditable('name', timeName, nameRef)}
-        </span>
-        <span className="tracker-value">
+    <Box sx={{ 
+      border: '2px solid #000000', 
+      borderRadius: '8px', 
+      padding: '15px', 
+      backgroundColor: '#ffffff'
+    }}>
+      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 1 }}>
+        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+          <AccessTimeIcon sx={{ color: '#000000', mr: 1 }} />
+          <Typography variant="subtitle1" component="div" sx={{ fontWeight: 'bold', color: '#000000' }}>
+            {renderEditable('name', timeName, nameRef)}
+          </Typography>
+        </Box>
+        <Typography variant="body1" sx={{ color: '#000000' }}>
           {renderEditable('currentYear', currentYear, currentYearRef)} / {renderEditable('endYear', endYear, endYearRef)}
-        </span>
-      </div>
-      <div className="tracker-bar time-bar">
-        <div className="tracker-bar-filled time-bar-filled" style={{ width: `${filledWidth}%` }}></div>
-      </div>
-    </div>
+        </Typography>
+      </Box>
+      <LinearProgress 
+        variant="determinate" 
+        value={progress} 
+        sx={{ 
+          height: 10, 
+          borderRadius: 5, 
+          backgroundColor: '#D3D3D3',
+          '& .MuiLinearProgress-bar': {
+            backgroundColor: '#000000'
+          }
+        }} 
+      />
+    </Box>
   );
 };
 

@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Typography, Button, Card, CardContent } from '@mui/material';
-import { ListAlt, BarChart } from '@mui/icons-material';
+import { Button } from '@mui/material';
 import EffortMeter from '../components/trackers/EffortMeter';
 import ImpactMeter from '../components/trackers/ImpactMeter';
 import TimeMeter from '../components/trackers/TimeMeter';
@@ -9,8 +8,6 @@ import Rewards from '../components/trackers/Rewards';
 import ActionList from '../components/actions/ActionList';
 import { setCurrentQuestionIndex, updateGameState } from '../redux/gameSlice';
 import { useNavigate } from 'react-router-dom';
-import './GamePlayPage.css';
-import './Card.css';
 
 const GamePlayPage = () => {
   const dispatch = useDispatch();
@@ -18,8 +15,8 @@ const GamePlayPage = () => {
   const gameState = useSelector(state => state.game);
   const [selectedActionIndex, setSelectedActionIndex] = useState(null);
 
-  const handleActionSelect = (index) => {
-    setSelectedActionIndex(index);
+  const handleActionSelect = (actionIndex) => {
+    setSelectedActionIndex(actionIndex);
   };
 
   const handleNextQuestion = () => {
@@ -44,51 +41,38 @@ const GamePlayPage = () => {
     }
   };
 
-  const currentQuestion = gameState.questions[gameState.currentQuestionIndex];
-
   return (
     <div className="game-play-page">
       <div className="content-container">
-        <Card className="custom-card">
-          <CardContent>
-            <Typography variant="h6" gutterBottom className="card-title">
-              <BarChart fontSize="small" /> Stats
-            </Typography>
+        <div className="sidebar">
+          <div className="section">
+            <h2>Trackers</h2>
             <div className="trackers">
-              <EffortMeter editable={false} className="tracker" />
-              <ImpactMeter editable={false} className="tracker" />
-              <TimeMeter editable={false} className="tracker" />
-              <Rewards editable={false} className="tracker" />
+              <EffortMeter editable={false} />
+              <ImpactMeter editable={false} />
+              <TimeMeter editable={false} />
+              <Rewards editable={false} />
             </div>
-          </CardContent>
-        </Card>
-
-        <Card className="custom-card">
-          <CardContent>
-            <Typography variant="h6" gutterBottom className="card-title">
-              <ListAlt fontSize="small" /> Actions
-            </Typography>
-            <div className="main-content action-list-container">
-              <ActionList
-                questionIndex={gameState.currentQuestionIndex}
-                editable={false}
-                initialQuestion={currentQuestion}
-                initialActions={currentQuestion.actions}
+          </div>
+        </div>
+        <div className="main-content">
+          <div className="section">
+            <h2>Questions</h2>
+            <div className="questions-container">
+              <ActionList 
+                questionIndex={gameState.currentQuestionIndex} 
+                editable={false} 
+                initialQuestion={gameState.questions[gameState.currentQuestionIndex]} 
+                initialActions={gameState.questions[gameState.currentQuestionIndex].actions}
+                onActionSelect={handleActionSelect}
                 selectedActionIndex={selectedActionIndex}
-                setSelectedActionIndex={handleActionSelect}
               />
-              <Button 
-                variant="contained" 
-                color="primary" 
-                onClick={handleNextQuestion}
-                disabled={selectedActionIndex === null}
-                className="next-question-button"
-              >
-                {gameState.currentQuestionIndex < gameState.questions.length - 1 ? "Next Question" : "Finish Game"}
-              </Button>
             </div>
-          </CardContent>
-        </Card>
+            <Button onClick={handleNextQuestion} className="add-question-button" disabled={selectedActionIndex === null}>
+              Next Question
+            </Button>
+          </div>
+        </div>
       </div>
     </div>
   );

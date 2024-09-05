@@ -1,0 +1,211 @@
+/* General Styles */
+body {
+  font-family: 'Poppins', sans-serif;
+}
+
+/* GameSetupPage Styles */
+.game-setup-page {
+  min-height: 100vh;
+  padding: 0px 20px;
+  width: 100%;
+  /* Used in GameSetupPage component */
+}
+
+.header {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 10px;
+  /* Used in GameSetupPage component */
+}
+
+.save-game-button {
+  background-color: red; /* Changed to red */
+  color: red; /* Changed to red */
+  border: none;
+  padding: 12px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 500;
+  transition: background-color 0.3s ease;
+  /* Used in GameSetupPage component */
+}
+
+.save-game-button:hover {
+  background-color: #19d279;
+  /* Used in GameSetupPage component */
+}
+
+.content-container {
+  display: flex;
+  gap: 30px;
+  background-color: white;
+  border-radius: 8px;
+  padding: 30px;
+  width: 100%;
+  margin: 0 auto;
+  justify-content: flex-start;
+  /* Used in GameSetupPage component */
+}
+
+.sidebar {
+  flex: 0 0 20%;
+  padding-right: 30px;
+  border-right: 1px solid #e0e0e0;
+  align-self: flex-start;
+  position: sticky;
+  top: 20px;
+  /* Used in GameSetupPage component */
+}
+
+.main-content {
+  flex: 1 1 80%;
+  /* Used in GameSetupPage component */
+}
+
+.section {
+  margin-bottom: 40px;
+  /* Used in GameSetupPage component */
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  /* Used in GameSetupPage component */
+}
+
+.section h2 {
+  font-size: 22px;
+  color: #333;
+  margin-bottom: 20px;
+  font-weight: 600;
+  /* Used in GameSetupPage component */
+}
+
+.trackers {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  /* Used in GameSetupPage component */
+}
+
+.tracker-container {
+  border-radius: 8px;
+  
+  /* New style for individual tracker containers */
+}
+
+.questions-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-bottom: 30px;
+  /* Used in GameSetupPage component */
+}
+
+.add-question-button {
+  background-color: #000000;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 500;
+  transition: background-color 0.3s ease;
+  /* Used in GameSetupPage component */
+}
+
+.add-question-button:hover {
+  background-color: #CCFFCC;
+  color: #000000;
+  /* Used in GameSetupPage component */
+}
+
+.question-card {
+  margin-bottom: 20px;
+  /* Used in GameSetupPage component */
+}
+
+@media (max-width: 1200px) {
+  .content-container {
+    flex-direction: column;
+    /* Used in GameSetupPage component */
+  }
+
+  .sidebar {
+    flex: 0 0 auto;
+    padding-right: 0;
+    border-right: none;
+    border-bottom: 1px solid #e0e0e0;
+    padding-bottom: 30px;
+    margin-bottom: 30px;
+    /* Used in GameSetupPage component */
+  }
+}
+
+/* Input and Textarea Styles */
+.game-name-input,
+.game-description-input {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 15px;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  font-size: 16px;
+  transition: border-color 0.3s ease;
+  /* Used in GameSetupPage component */
+}
+
+.game-name-input:focus,
+.game-description-input:focus {
+  border-color: #000000;
+  outline: none;
+  /* Used in GameSetupPage component */
+}
+
+/* Button Styles */
+.button {
+  background-color: #000000;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 500;
+  transition: background-color 0.3s ease;
+  /* General button style, can be used in multiple components */
+}
+
+.button:hover {
+  background-color: #3f8b43;
+  /* General button style, can be used in multiple components */
+}
+
+/* Additional styles for other components can be added here */
+
+.save-game-icon {
+  color: rgb(0, 0, 0)  /* Ensure the color is applied */
+}
+
+.editable-content {
+  display: inline-block;
+  min-width: 20px;
+}
+
+.flex.justify-between.items-center {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.text-sm.font-light {
+  text-align: left;
+  flex-grow: 1;
+}
+
+.text-sm.font-bold {
+  text-align: right;
+}
