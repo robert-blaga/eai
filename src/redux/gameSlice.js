@@ -56,6 +56,7 @@ export const deleteGame = createAsyncThunk('game/deleteGame', async (id) => {
   rewards: [],
   rewardProgress: {},
   earnedRewards: [],
+  initialEffortPoints: 100,
 };
 
 export const gameSlice = createSlice({
@@ -151,7 +152,7 @@ export const gameSlice = createSlice({
     },
     resetGameProgress: (state) => {
       state.currentQuestionIndex = 0;
-      state.effortPoints = state.initialEffortPoints;
+      state.effortPoints = state.initialEffortPoints || 100; // Use 100 as a fallback
       state.impactPoints = 0;
       state.currentYear = state.startYear;
       state.rewardsCount = 0;
